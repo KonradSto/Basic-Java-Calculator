@@ -16,7 +16,7 @@ class EntryValidatorTest {
     @Test
     void shouldReturnFalseForIncorrectEntry(){
         //Given
-        String incorrectEntry = "99 +- 66.1";
+        String incorrectEntry = "99 +- 66";
 
         //Then
         assertFalse(EntryValidator.isLineValid(incorrectEntry));
