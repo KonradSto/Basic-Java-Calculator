@@ -1,24 +1,31 @@
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class EntryValidatorTest {
 
-    @Test
-    void shouldReturnTrueForCorrectEntry(){
-        //Given
-        String correctEntry = "9.18   + 3.5";
+    @ParameterizedTest
+    @ValueSource(strings = {"9.18   + 3.5", " 22-1.8", " 1  * 9 ", " 9 / 15.6"})
+    void shouldReturnTrueForCorrectEntry(String entry) {
+        assertTrue(EntryValidator.isLineValid(entry));
+    }
 
-        //Then
-        assertTrue(EntryValidator.isLineValid(correctEntry));
+    @ParameterizedTest
+    @ValueSource(strings = {"99 +- 66", "8 12", "+ 6"})
+    void shouldReturnFalseForIncorrectEntry(String entry) {
+        assertFalse(EntryValidator.isLineValid(entry));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"  ", ""})
+    void shouldThrowIllegalArgumentExceptionForEmptyLine(String line) {
+        assertThrows(IllegalArgumentException.class, () -> EntryValidator.isLineValid(line));
     }
 
     @Test
-    void shouldReturnFalseForIncorrectEntry(){
-        //Given
-        String incorrectEntry = "99 +- 66";
-
-        //Then
-        assertFalse(EntryValidator.isLineValid(incorrectEntry));
+    void shouldThrowIllegalArgumentExceptionForNullLine() {
+        assertThrows(IllegalArgumentException.class, () -> EntryValidator.isLineValid(null));
     }
 }
